@@ -1,0 +1,26 @@
+# 無視するフォルダ
+.Rproj.user
+.ipynb_checkpoints
+.idea
+/**/.ipynb_checkpoints/
+/**/__pycache__/
+
+# 基本的に配下のすべてのファイルを無視するフォルダ
+/data/*
+/notebooks/*
+/document/*
+/tmp/*
+!/**/.gitkeep
+
+
+# 無視するファイル
+*.csv
+*.xlsx
+*.zip
+*.gzip
+.RData
+.Rhistory
+.Rproj
+*.log
+!access.log
+.Rproj.user
