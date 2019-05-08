@@ -165,7 +165,7 @@ class TodashiKyouinQes2018(TodashiKyouinQes2017):
         return result
 
 
-def main():
+def seed():
     c = ReadConfigTodashi20162017(path='src/setting.ini')
     c.get_setting()
     qlist = QuestionList(c).build().qlist

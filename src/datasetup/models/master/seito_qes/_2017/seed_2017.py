@@ -127,5 +127,5 @@ def main():
     seito_qes2 = main20152016()
     data = pd.concat([seito_qes, seito_qes2], axis=0)
     print(data.shape, seito_qes.shape, seito_qes2.shape)
-    # data.to_pickle('./data/work_data/seito_qes_2017.pkl')
+    # data.to_pickle('./data/original_data/work_data/seito_qes_2017.pkl')
     return data

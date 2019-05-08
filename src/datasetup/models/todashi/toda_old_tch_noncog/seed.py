@@ -83,7 +83,7 @@ class TodashiQesNoncog2016(TodashiQesNoncog):
         self.convert_list.update(astype)
 
 
-def main():
+def seed():
     c = ReadConfigTodashi20162017(path='src/setting.ini')
     c.get_setting()
     data = (

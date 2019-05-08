@@ -55,7 +55,7 @@ class TodashiKyouinQes2016(TodashiKyouinQes):
         self.convert_list.update(astype)
 
 
-def main():
+def seed():
     c = ReadConfigTodashi20162017(path='src/setting.ini')
     c.get_setting()
     data = (

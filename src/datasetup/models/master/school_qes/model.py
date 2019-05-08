@@ -10,7 +10,7 @@ class SchoolQes(CsvIOMixin, SchoolQesSchema):
     s = SchoolQes()
     s.fetch(['s51'])
     """
-    path = './data/other/workdata/school_qes.csv'
+    path = './data/db/master/school_qes.csv'
     key_tidy = ['year_target', 'school_id', 'grade', 'subject']
     question_col = 'squestion'
     value_col = 'value'

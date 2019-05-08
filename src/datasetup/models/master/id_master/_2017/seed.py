@@ -232,8 +232,8 @@ class IdMaster2015(IdMaster):
     IdMasterの2015年度版を作る。
     """
 
-    gakuryoku_path = 'data/work_data/H28gakuryoku.csv'
-    seito_qes_path = 'data/work_data/2015_from_raw.pkl'
+    gakuryoku_path = 'data/original_data/work_data/H28gakuryoku.csv'
+    seito_qes_path = 'data/original_data/work_data/2015_from_raw.pkl'
 
 
     def __init__(self, master_id):
