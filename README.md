@@ -1,5 +1,5 @@
 # System Dependencies
-* Python: `3.6`
+* Python: >= `3.6`
 * PostgreSQL: >= `9.5`
 * pip
 * pipenv
@@ -46,27 +46,44 @@ $ psql -U postgres -p 5433
 $ /Library/PostgreSQL/9.5/bin/postmaster -D/Library/PostgreSQL/9.5/data &
 ```
 などでサーバーをバックグランドで起動することができます。
+（パスは自分の環境に合わせて適切に書き換えてください）
+
+## そのほか
 
 # 環境のセットアップ
 ## gitからソースコードのダウンロード
+どこか作業をするフォルダを決めて次の様に実行してください。
 ```
 $ git clone https://github.com/HirotakeIto/saitama_data.git
+$ cd saitama_data
 ```
 ## パッケージインストール
 ```
-pipenv install
+pipenv install Pipfile
 ```
+
 
 ## データの入手
 伊藤に連絡ください。必要なデータを提供します。
+次の様なフォルダ構造のデータを入手するはずです。
+
+-data
+    |-db
+    |-dump
+
+## データベース作成
+ポストグレスに適当な名前でデータベースを作成してください。
+（以下のsetting fileの例だと `saitamatmp` という名前）
 
 ## setting fileの作成
-`src/setting.ini` を編集してください。
+`src/setting.ini` を作成する。
+基本的には `src/setting_sample.ini` をそのままコピペして作って欲しいですが、
+下記の部分だけ書き換えてください。
 
 ```
 [connection]
 application=psgr
-connect_string=postgresql://[username]:[password]@localhost:[port]/saitamatmp
+connect_string=postgresql://[username]:[password]@localhost:[port]/[db_name]
 ```
 
 例えば次の様に書くことになります。
@@ -76,3 +93,21 @@ connect_string=postgresql://[username]:[password]@localhost:[port]/saitamatmp
 application=psgr
 connect_string=postgresql://postgres:abogadoron1126@localhost:5433/saitamatmp
 ```
+
+# Restore
+```
+$ pipenv shell
+$ ipython
+```
+でipythonのconsoleを起動してください（別にpipenv環境の実行環境ならなんでも良いですが）。
+```
+from src.datasetup.lib.save_load_db_and_gzip import DBDumper
+from src.connect_server import return_connection
+
+root_dir = './data/dump/rdb'
+engine, conn = return_connection()
+db_copy = DBDumper(copy_type='restore', root_dir=root_dir, engine=engine, conn=conn)
+db_copy.execute()
+```
+
+

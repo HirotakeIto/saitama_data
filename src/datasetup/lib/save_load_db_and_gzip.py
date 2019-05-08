@@ -1,18 +1,18 @@
 import os
-import pandas as pd
 import gc
-# import gzip
+import subprocess
+import pandas as pd
 from sqlalchemy.engine import Engine, Connection, reflection
 from sqlalchemy.sql import select
 from sqlalchemy import Table, MetaData
+from sqlalchemy.schema import CreateSchema
 from sqlalchemy.sql.elements import literal_column
-from src.connect_server import return_connection
 from src.sql.connect_postgres import to_sql
 
 
 def helper_get_tablename_to_file_path(root_dir, schema_name, table_name):
     return os.path.join(
-        root_dir, schema_name, table_name, "".join([table_name, "{0}", ".csv.gzip"])
+        root_dir, schema_name, table_name, "".join([table_name, "{0}", ".csv"])
     )
 
 
@@ -77,9 +77,14 @@ class CopyDataRdbToExistsDirs(CopyData):
         # gzipでデータをそのまま保存する
         def save_gzip(dfx: pd.DataFrame, path):
             try:
-                dfx.to_csv(path, index=False, encoding="utf-8", compression='gzip')
+                dfx.to_csv(path + '.gz', index=False, encoding="utf-8", compression='gzip')
             except:
-                print(path.replace('.gzip', ''))
+                print(path)
+                if os.path.exists(path + '.gz'):
+                    os.remove(path + '.gz')
+                dfx.to_csv(path, index=False, encoding="utf-8")
+                subprocess.call(['gzip', '-9', path])
+                # print(path.replace('.gzip', ''))
                 # dfx.to_csv(path.replace('.gzip', ''), index=False, encoding="utf-8")
             pass
 
@@ -104,6 +109,10 @@ class CopyDataExistsDirsToRdb(CopyData):
         )
 
     def save_table_iterator(self):
+        self.create_schema(
+            engine = self.engine,
+            schema_name = self.schema_name
+        )
         self.save_table_iterator_in_rdb(
             table_iterator=self.table_iterator,
             engine=self.engine,
@@ -112,8 +121,15 @@ class CopyDataExistsDirsToRdb(CopyData):
         )
 
     @staticmethod
+    def create_schema(engine, schema_name):
+        insp = reflection.Inspector.from_engine(engine)
+        schema_list = insp.get_schema_names()
+        if schema_name not in  schema_list:
+            engine.execute(CreateSchema(schema_name))
+
+    @staticmethod
     def get_table_iterator_from_exists_dirs(
-            root_dir: str, table_name: str, schema_name: str, ignore_files=['.DS_Store'], **argv):
+            root_dir: str, table_name: str, schema_name: str, ignore_files=('.DS_Store', ), **argv):
 
         def df_engineering_for_rdb_monkey_patch(df, tbl_name, shm_name):
             if (shm_name == 'master') & (tbl_name == 'school_qes'):
@@ -125,7 +141,7 @@ class CopyDataExistsDirsToRdb(CopyData):
         def table_iterator_from_paths(paths, **argvs):
             for path in paths:
                 try:
-                    df = pd.read_csv(path, encoding='utf-8', compression='gzip', **argvs)
+                    df = pd.read_csv(path, encoding='utf-8', compression='infer', **argvs)
                 except OSError:
                     df = pd.read_csv(path, encoding='utf-8', **argvs)
                 df = df_engineering_for_rdb_monkey_patch(df, tbl_name=table_name, shm_name=schema_name)
@@ -141,12 +157,26 @@ class CopyDataExistsDirsToRdb(CopyData):
             to_sql(df=df, name=table_name, schema=schema_name, engine=engine, if_exists='append')
 
 
-class DBCopy:
+class DBDumper:
+    """
+    # dump
+    root_dir = './data/dump/rdb'
+    engine, conn = return_connection()
+    db_copy = DBDumper(copy_type='dump', root_dir=root_dir, engine=engine, conn=conn)
+    db_copy.execute()
+    # restore
+    root_dir = './data/dump/rdb'
+    engine, conn = return_connection()
+    db_copy = DBDumper(copy_type='restore', root_dir=root_dir, engine=engine, conn=conn)
+    db_copy.execute()
+    """
     def __init__(self, copy_type: str, root_dir: str, engine: Engine, conn: Connection, **argv):
-        if (copy_type == 'default') | (copy_type == 'ExistsDirsToRdb'):
+        if copy_type in ('default', 'restore', 'ExistsDirsToRdb'):
+            self.mode = 'restore'
             self.copy_data_cls_name = 'CopyDataExistsDirsToRdb'
             self.copy_data_cls = CopyDataExistsDirsToRdb
-        elif copy_type == 'RdbToExistsDirs':
+        elif copy_type in ('RdbToExistsDirs', 'dump'):
+            self.mode = 'dump'
             self.copy_data_cls_name = 'RdbToExistsDirs'
             self.copy_data_cls = CopyDataRdbToExistsDirs
         else:
@@ -157,7 +187,7 @@ class DBCopy:
         for attr_name in list(argv.keys()):
             self.__setattr__(attr_name, argv[attr_name])
 
-    def save_data(self):
+    def execute(self):
         schema_to_table = self.get_dir_schema_to_table()
         for schema_name in schema_to_table.keys():
             for table_name in schema_to_table[schema_name]:
@@ -181,13 +211,13 @@ class DBCopy:
             raise ValueError
 
     @staticmethod
-    def get_dir_schema_to_table_from_engine(engine: Engine):
+    def get_dir_schema_to_table_from_engine(engine: Engine, ignore_schema=('information_schema', )):
         insp = reflection.Inspector.from_engine(engine)
         schema_list = insp.get_schema_names()
-        return {s: insp.get_table_names(schema=s) for s in schema_list}
+        return {s: insp.get_table_names(schema=s) for s in schema_list if s not in ignore_schema}
 
     @staticmethod
-    def get_dir_schema_to_table_from_exists_dirs(root_dir: str, ignore_files=['.DS_Store']):
+    def get_dir_schema_to_table_from_exists_dirs(root_dir: str, ignore_files=('.DS_Store', )):
         return {
             s: [x for x in os.listdir(os.path.join(root_dir, s)) if x not in ignore_files]
             for s in os.listdir(root_dir)
@@ -196,26 +226,27 @@ class DBCopy:
 
 
 
-def tmp():
-    # 自前でスキーマ及び、テーブルを作る必要もある
-    # テーブルはpandas_schemaから作るようにしよう
-
-    root_dir = './data/tmp/rdb'
-    engine, conn = return_connection()
-    # save_data_from_rdb(root_dir=root_dir, engine=engine, conn=conn)
-    table_name = 'id_master'
-    schema_name = 'master'
-    db_copy = DBCopy(copy_type='ExistsDirsToRdb', root_dir=root_dir, engine=engine, conn=conn)
-    db_copy.save_data()
-    cdedr = CopyDataExistsDirsToRdb(db_copy=db_copy, table_name=table_name, schema_name=schema_name)
-    cdedr.get_table_iterator()
-    cdedr.save_table_iterator()
-
-    root_dir = './data/tmp2/rdb'
-    engine, conn = return_connection()
-    db_copy = DBCopy(copy_type='RdbToExistsDirs', root_dir=root_dir, engine=engine, conn=conn)
-    db_copy.save_data()
-
+# def tmp():
+#     from src.connect_server import return_connection
+#     # 自前でスキーマ及び、テーブルを作る必要もある
+#     # テーブルはpandas_schemaから作るようにしよう
+#
+#     root_dir = './data/dump/rdb'
+#     engine, conn = return_connection()
+#     # save_data_from_rdb(root_dir=root_dir, engine=engine, conn=conn)
+#     table_name = 'id_master'
+#     schema_name = 'master'
+#     db_copy = DBDumper(copy_type='ExistsDirsToRdb', root_dir=root_dir, engine=engine, conn=conn)
+#     db_copy.execute()
+#     cdedr = CopyDataExistsDirsToRdb(db_copy=db_copy, table_name=table_name, schema_name=schema_name)
+#     cdedr.get_table_iterator()
+#     cdedr.save_table_iterator()
+#
+#     root_dir = './data/tmp2/rdb'
+#     engine, conn = return_connection()
+#     db_copy = DBDumper(copy_type='RdbToExistsDirs', root_dir=root_dir, engine=engine, conn=conn)
+#     db_copy.execute()
+#
 
     # dfx = df
     # path = './data/tmp/rdb/master/id_master/id_master{0}.csv'.format(10)

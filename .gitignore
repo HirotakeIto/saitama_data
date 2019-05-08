@@ -24,3 +24,5 @@
 *.log
 !access.log
 .Rproj.user
+.DS_Store
+src/setting.ini
