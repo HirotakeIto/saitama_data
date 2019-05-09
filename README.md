@@ -7,7 +7,9 @@
 
 本レポジトリではpipenvを使用してバージョンコントロールしています。
 
-# 準備
+# 1. 準備
+まず必要な諸々のアプリケーションを導入します。
+
 ## Python導入
 Please see below document.
 
@@ -27,7 +29,7 @@ $ pip install --user pipenv
 > このコマンドは user installation を行い、システム全体に関わるパッケージを壊さないようにします。 インストールを行った後に pipenv が使えるようにならない場合は、 user base のバイナリディレクトリを PATH に追加する必要があります。
 (https://pipenv-ja.readthedocs.io/ja/translate-ja/install.html#pragmatic-installation-of-pipenv)
 
-## PostgreSQL
+## PostgreSQLの導入
 RDB（リレーションを張っていないので実質DB置き場）としてPostgreSQLを利用しています。
 次のページからPostgreSQLをダウンロードしてください。
 
@@ -48,9 +50,12 @@ $ /Library/PostgreSQL/9.5/bin/postmaster -D/Library/PostgreSQL/9.5/data &
 などでサーバーをバックグランドで起動することができます。
 （パスは自分の環境に合わせて適切に書き換えてください）
 
-## そのほか
 
-# 環境のセットアップ
+
+# 2. 環境のセットアップ
+次に環境を構築します。
+基本的には1. データを入手（伊藤まで連絡）し適切に配置、2. initialファイルを作成の手順です。
+
 ## gitからソースコードのダウンロード
 どこか作業をするフォルダを決めて次の様に実行してください。
 ```
@@ -66,10 +71,21 @@ pipenv install Pipfile
 ## データの入手
 伊藤に連絡ください。必要なデータを提供します。
 次の様なフォルダ構造のデータを入手するはずです。
+入手したデータをこのフォルダ構造の通りに配置してください。
 
--data
-    |-db
-    |-dump
+```
+$ tree -d -L 2 ./data/dump/ ./data/db
+./data/dump/
+└── rdb
+    ├── master
+    ├── todashi
+    └── work
+./data/db
+├── external
+│   └── primary_low_grade
+├── master
+└── todashi
+```
 
 ## データベース作成
 ポストグレスに適当な名前でデータベースを作成してください。
@@ -94,12 +110,25 @@ application=psgr
 connect_string=postgresql://postgres:abogadoron1126@localhost:5433/saitamatmp
 ```
 
-# Restore
+# 3. Restore & Dump
+## Restore
 ```
 $ pipenv shell
 $ ipython
 ```
 でipythonのconsoleを起動してください（別にpipenv環境の実行環境ならなんでも良いですが）。
+その後次のコードでデータをRDBにリストアします。
+```
+from src.datasetup.lib.save_load_db_and_gzip import DBDumper
+from src.connect_server import return_connection
+
+root_dir = './data/dump/rdb'
+engine, conn = return_connection()
+db_copy = DBDumper(copy_type='restore', root_dir=root_dir, engine=engine, conn=conn)
+db_copy.execute()
+```
+## Dump
+作ったデータは次の様にダンプすることもできます。
 ```
 from src.datasetup.lib.save_load_db_and_gzip import DBDumper
 from src.connect_server import return_connection
@@ -110,4 +139,24 @@ db_copy = DBDumper(copy_type='restore', root_dir=root_dir, engine=engine, conn=c
 db_copy.execute()
 ```
 
+# 4. データの利用
+今現在準備しているのは、次のデータです。
+
+`IdMaster, Gakuryoku, SeitoQes, SchoolQes, SeitoQesSosei, TodaTchBelong, TodaTeacherQes, TodaOldTchNoncog`
+
+これら次の様に利用することができます。
+```
+In[2]: from src.datasetup.models import IdMaster
+Connection to "APP: psgr,  DB:postgresql://postgres:abogadoron1126@localhost:5433/tmp2"
+connecting::::::: postgresql://postgres:abogadoron1126@localhost:5433/tmp2
+In[4]: idmaster = IdMaster()
+In[5]: idmaster.read()
+In[10]: idmaster.data.head(1)
+Out[10]:
+   city_id  class  grade   ...    school_id  sex    year
+0  26646.0    1.0    6.0   ...      10276.0  1.0  2015.0
+
+[1 rows x 8 columns]
+```
+こんな感じでデータを `panads` の `DataFrame` の形で取得することができます。
 
