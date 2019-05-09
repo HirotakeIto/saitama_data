@@ -57,7 +57,13 @@ $ /Library/PostgreSQL/9.5/bin/postmaster -D/Library/PostgreSQL/9.5/data &
 基本的には1. データを入手（伊藤まで連絡）し適切に配置、2. initialファイルを作成の手順です。
 
 ## gitからソースコードのダウンロード
-どこか作業をするフォルダを決めて次の様に実行してください。
+どこか作業をするフォルダの親ディレクトリを決めて次の様に実行してください。
+仮に `path` を作業をするフォルダの親ディレクトリとします。まずはそこにカレントディレクトリを移してください。
+```
+cd path
+```
+その後、git cloneします。
+
 ```
 $ git clone https://github.com/HirotakeIto/saitama_data.git
 $ cd saitama_data
