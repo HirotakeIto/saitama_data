@@ -56,7 +56,7 @@ class CopyDataRdbToExistsDirs(CopyData):
         )
 
     @staticmethod
-    def get_table_iterator_from_rdb(conn: Connection, table_name: str, schema_name: str, chunksize=1000000, **argv):
+    def get_table_iterator_from_rdb(conn: Connection, table_name: str, schema_name: str, chunksize=300000, **argv):
         """
         get table iterator from table info string
 
@@ -99,7 +99,6 @@ class CopyDataExistsDirsToRdb(CopyData):
         self.root_dir = db_copy.root_dir
         self.engine = db_copy.engine
         self.table_iterator = None
-
 
     def get_table_iterator(self):
         self.table_iterator = self.get_table_iterator_from_exists_dirs(
@@ -153,12 +152,15 @@ class CopyDataExistsDirsToRdb(CopyData):
 
     @staticmethod
     def save_table_iterator_in_rdb(table_iterator: iter, engine: Engine, table_name: str, schema_name: str):
-        for df in table_iterator:
-            to_sql(df=df, name=table_name, schema=schema_name, engine=engine, if_exists='append')
-
+        for i, df in enumerate(table_iterator):
+            if i == 0:
+                to_sql(df=df, name=table_name, schema=schema_name, engine=engine, if_exists='replace')
+            else:
+                to_sql(df=df, name=table_name, schema=schema_name, engine=engine, if_exists='append')
 
 class DBDumper:
     """
+    from src.connect_server import return_connection
     # dump
     root_dir = './data/dump/rdb'
     engine, conn = return_connection()
