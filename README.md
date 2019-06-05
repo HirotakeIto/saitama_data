@@ -102,8 +102,8 @@ $ tree -d -L 2 ./data/dump/ ./data/db
 （以下のsetting fileの例だと `saitamatmp` という名前）
 
 ## setting fileの作成
-`src/setting.ini` を作成する。
-基本的には `src/setting_sample.ini` をそのままコピペして作って欲しいですが、
+`saitama_data/setting.ini` を作成する。
+基本的には `saitama_data/setting_sample.ini` をそのままコピペして作って欲しいですが、
 下記の部分だけ書き換えてください。
 
 ```
@@ -129,8 +129,8 @@ $ ipython
 でipythonのconsoleを起動してください（別にpipenv環境の実行環境ならなんでも良いですが）。
 その後次のコードでデータをRDBにリストアします。
 ```
-from src.datasetup.lib.save_load_db_and_gzip import DBDumper
-from src.connect_server import return_connection
+from saitama_data.datasetup.lib.save_load_db_and_gzip import DBDumper
+from saitama_data.connect_server import return_connection
 
 root_dir = './data/dump/rdb'
 engine, conn = return_connection()
@@ -140,8 +140,8 @@ db_copy.execute()
 ## Dump
 作ったデータは次の様にダンプすることもできます。
 ```
-from src.datasetup.lib.save_load_db_and_gzip import DBDumper
-from src.connect_server import return_connection
+from saitama_data.datasetup.lib.save_load_db_and_gzip import DBDumper
+from saitama_data.connect_server import return_connection
 
 root_dir = './data/dump/rdb'
 engine, conn = return_connection()
@@ -156,7 +156,7 @@ db_copy.execute()
 
 これら次の様に利用することができます。
 ```
-In[2]: from src.datasetup.models import IdMaster
+In[2]: from saitama_data.datasetup.models import IdMaster
 Connection to "APP: psgr,  DB:postgresql://postgres:abogadoron1126@localhost:5433/tmp2"
 connecting::::::: postgresql://postgres:abogadoron1126@localhost:5433/tmp2
 In[4]: idmaster = IdMaster()
