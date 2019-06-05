@@ -8,8 +8,8 @@ import numpy as np
 # from ..model import IdMaster
 from src.datasetup.models.master.id_master.model import IdMaster
 from src.lib.read_config import ReadConfig2016, ReadConfig2017
-from src.datasetup.models.master.school_converter.seed_2017 import ClassIdSchoolId
-
+# from src.datasetup.models.info.classid_schoolid.trash.seed_2017 import ClassIdSchoolId
+from src.datasetup.models.info import ClassIdSchoolId
 
 def get_uniqueness(data, unique_key):
     data = data.sort_values(['sex'])
@@ -21,9 +21,6 @@ class MasterId:
     """
         connfig の中にある所定のファイルを入れると、結果が帰ってくる。
         元々のデータのschool_idのところには、クラスのidが入っているらしい。。。
-        これは
-         sch_id : class_is
-        を作るクラス
     """
     path_id_master = '/IDマスタ/id_master_grade_skp29.csv'
     need_original_col = ['mst_stuid', 'stuid_4', 'stuid_5', 'stuid_6', 'stuid_7', 'stuid_8', 'stuid_9']
@@ -256,6 +253,7 @@ class IdMaster2015(IdMaster):
         print('Init: data shape is {shape}'.format(shape=id_master.shape))
         id_master = pd.merge(id_master, master_id, on=['id', 'grade'], how='left')
         print('after left join master_id, data shape is {shape}'.format(shape=id_master.shape))
+        id_master.drop_duplicates(subset=['grade', 'year', 'id'], inplace=True)
         return id_master
 
     def get_data1(self):
@@ -311,7 +309,7 @@ def main2017():
     c = ReadConfig2017(path='src/setting.ini')
     c.get_setting()
     # data setup
-    class_id_school_id = ClassIdSchoolId().build().data
+    class_id_school_id = ClassIdSchoolId().read().data
     master_id = MasterId(c).build().data
     seito_info = SeitoInfo2017(c).build().data
     i = IdMaster2017({'class_id_school_id': class_id_school_id,
@@ -328,7 +326,7 @@ def main2016():
     c = ReadConfig2016(path='src/setting.ini')
     c.get_setting()
     # data setup
-    class_id_school_id = ClassIdSchoolId().build().data
+    class_id_school_id = ClassIdSchoolId().read().data
     master_id = MasterId(c).build().data
     seito_info = SeitoInfo2016(c).build().data
     i = IdMaster2016({'class_id_school_id': class_id_school_id,

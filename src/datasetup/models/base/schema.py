@@ -36,7 +36,10 @@ class BaseSchema():
             raise ValueError('validation error')
 
     def _convert(self, data):
-        return self.convert_columns_type(data, self.convert_list)
+        return (
+            self.convert_columns_type(data, self.convert_list)
+            [[row.name for row in self.schema.columns]]  # set row order
+        )
 
     def _validate_convert(self, data):
         self._validate(data)

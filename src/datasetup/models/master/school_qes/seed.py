@@ -1,6 +1,6 @@
 import pandas as pd
 from tqdm import tqdm
-from src.datasetup.models.master.school_converter.seed_2018 import SchidSchoolid
+from src.datasetup.models.info.school_converter.seed_2018 import SchidSchoolid
 from src.datasetup.models.master.school_qes.model import SchoolQes
 from src.lib.read_config import ReadConfig2018
 import os
@@ -65,6 +65,7 @@ def seed():
                 key1 = lambda dfx: dfx['columns'].replace(columns_content_mapper_key1),
                 key2 = lambda dfx: dfx['columns'].replace(columns_content_mapper_key2),
                 school_type = school_type,
+                year = year,
                 year_answer = int(year),
                 year_target = int(year)-1
             )
@@ -85,7 +86,11 @@ def seed():
         )
         .pipe(item_to_na_if_not_in_list, 'school_id', list(mapper_sch_id_school_id.values()))
         .drop('sch_id', axis=1)
+        .assign(
+            key_unique=lambda dfx: dfx['key1'].str.cat(dfx[['school_type', 'year']].astype(str), sep='_', na_rep='na'),
+        )
         [['key1', 'key2', 'school_id', 'school_type', 'year_answer', 'year_target', 'value']]
+
     )
     print(df_save.shape)
     s = SchoolQes(df_save)

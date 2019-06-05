@@ -2,6 +2,7 @@
 * Python: >= `3.6`
 * PostgreSQL: >= `9.5`
 * pip
+* pyenv
 * pipenv
 
 
@@ -12,16 +13,19 @@
 
 ## Python導入
 Please see below document.
-
+この時64bit版を入れるようにしてください。
+https://qiita.com/shibukawa/items/0daab479a2fd2cb8a0e7
 * [The Hitchhiker's Guide to Python: Properly Installing Python](https://docs.python-guide.org/starting/installation/)
 
+## pyenv
+windows
 
 ## pipenv導入
 公式の導入ページ
 * https://github.com/pypa/pipenv
 * https://pipenv-ja.readthedocs.io/ja/translate-ja/index.html
 
-基本的にはpipが使えれば次のコマンドで入ります。
+基本的にはpipが使えれば次のコマンドで入りますが実行環境に合わせて、上記サイトを必ず確認してください。
 ```
 $ pip install --user pipenv
 ```

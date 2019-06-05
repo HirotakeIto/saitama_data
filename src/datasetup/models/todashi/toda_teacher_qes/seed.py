@@ -62,7 +62,7 @@ class QuestionList2018:
         return qlist
 
 
-class TodashiKyouinQes(DataFrameGetter):
+class TodashiKyouinQes():
     need_cols = ['school_name', 'teacher_id']
     # memo:t_grade, t_classは必ずしも数値じゃないが、そいつはfetchモジュールに入れとく
     convert_list = {'teacher_id': float}

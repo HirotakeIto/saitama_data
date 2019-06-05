@@ -11,6 +11,6 @@ class CsvIOMixin(BaseIOMixIn):
         self.data = pd.read_csv(filepath_or_buffer=self.path, **argv)
         return self
 
-    def save(self, **argv):
+    def save(self, index=False, **argv):
         os.makedirs(os.path.dirname(self.path), exist_ok=True)
-        self.data.to_csv(path_or_buf=self.path, **argv)
+        self.data.to_csv(path_or_buf=self.path, index=index, **argv)

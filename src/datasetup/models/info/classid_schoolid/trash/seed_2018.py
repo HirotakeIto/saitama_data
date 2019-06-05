@@ -1,6 +1,8 @@
 import pandas as pd
 from src.lib.read_config import ReadConfig2018
-from src.datasetup.models.master.school_converter.schema import SchidSchoolidSchema, SchoolClassSchema
+from src.datasetup.models.info.classid_schoolid.school_class.model import SchoolClassSchema
+from src.datasetup.models.info.classid_schoolid.schid_schoolid.model import SchidSchoolidSchema
+
 
 
 def convert_columns_type(data, convert_list: dict, errors='raise'):

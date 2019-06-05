@@ -9,9 +9,11 @@ class SchoolQesSchema(BaseSchema):
         'key2': str,
         'school_id': float,
         'school_type': str,
+        'year': float,
         'year_answer': float,
         'year_target': float,
-        'value': str
+        'value': str,
+        'key_unique': str
     }
     schema = Schema([
         Column('key1', [CanConvertValidation(str)]),

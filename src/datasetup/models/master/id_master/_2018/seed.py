@@ -2,7 +2,8 @@ import pandas as pd
 import numpy as np
 from src.datasetup.models.master.id_master.model import IdMaster
 from src.lib.read_config import ReadConfig2018
-from src.datasetup.models.master.school_converter.seed_2018 import ClassIdSchoolId
+# from src.datasetup.models.info.classid_schoolid.trash.seed_2018 import ClassIdSchoolId
+from src.datasetup.models.info import ClassIdSchoolId
 
 
 def convert_columns_type(data, convert_list: dict, errors='raise'):
@@ -183,7 +184,7 @@ def main2018(profileing=False):
     c = ReadConfig2018(path='src/setting.ini')
     c.get_setting()
     # data setup
-    class_id_school_id = ClassIdSchoolId().build().data
+    class_id_school_id = ClassIdSchoolId().read().data
     master_id = MasterId(c).build().data
     seito_info = SeitoInfo2018(c).build().data
     i = IdMaster2018({'class_id_school_id': class_id_school_id,

@@ -5,10 +5,19 @@ dataのgetterでdataがNoneだったらstmに基づいて呼び出し。すで�
 import pandas as pd
 from sqlalchemy.sql import select
 from sqlalchemy import Table, MetaData
+from sqlalchemy.engine import reflection
+from sqlalchemy.schema import CreateSchema
 from src.connect_server import return_connection
 from src.datasetup.models.mix_in.io_mixin.basic import BaseIOMixIn
 from src.sql.connect_postgres import to_sql
 _engine_default, _conn_default = return_connection()
+
+
+def create_schema(engine, schema_name):
+    insp = reflection.Inspector.from_engine(engine)
+    schema_list = insp.get_schema_names()
+    if schema_name not in schema_list:
+        engine.execute(CreateSchema(schema_name))
 
 
 class RdbIOMixin(BaseIOMixIn):
@@ -59,6 +68,7 @@ class RdbIOMixin(BaseIOMixIn):
         return self
 
     def save(self, if_exists='replace', **argv):
+        create_schema(engine=_engine_default, schema_name=self.schema_name)
         to_sql(df=self.data, name=self.table_name, schema=self.schema_name, engine=_engine_default, if_exists=if_exists, **argv)
 
     def pipe(self, func, *argv, **kwrd):

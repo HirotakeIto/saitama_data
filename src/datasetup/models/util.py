@@ -19,6 +19,7 @@ def get_schema_str(df: pd.DataFrame):
     column_type_item_list = []
     for col, dtyp in zip(df.dtypes.index.tolist(), df.dtypes.tolist()):
         schema_item_list.append('    Column(\"{col}\", [CanConvertValidation({typ})])'.format(col=col, typ=helper_type_str(dtyp.name)))
+        # schema_item_list.append('    Column(\"{col}\", [])'.format(col=col, typ=helper_type_str(dtyp.name)))
         column_type_item_list.append('    \"{col}\": {typ}'.format(col=col, typ=helper_type_str(dtyp.name)))
     schema_string = 'schema = Schema([\n{item_list}\n])'.format(item_list = ',\n'.join(schema_item_list))
     column_type_string = "column_type = {{\n{item_list} \n}}".format(item_list=',\n'.join(column_type_item_list))
