@@ -10,8 +10,9 @@
 /notebooks/*
 /document/*
 /tmp/*
-!/**/.gitkeep
-
+!./data/**/.gitkeep
+!/data/db/.gitkeep
+!/data/dump/.gitkeep
 
 # 無視するファイル
 *.csv

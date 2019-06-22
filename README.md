@@ -74,7 +74,7 @@ $ cd saitama_data
 ```
 ## パッケージインストール
 ```
-pipenv install Pipfile
+pipenv install -e Pipfile
 ```
 
 

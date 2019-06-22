@@ -14,3 +14,7 @@ class CsvIOMixin(BaseIOMixIn):
     def save(self, index=False, **argv):
         os.makedirs(os.path.dirname(self.path), exist_ok=True)
         self.data.to_csv(path_or_buf=self.path, index=index, **argv)
+
+    def pipe(self, func, *args, **kwargs):
+        self.data = self.data.pipe(func, *args, **kwargs)
+        return self

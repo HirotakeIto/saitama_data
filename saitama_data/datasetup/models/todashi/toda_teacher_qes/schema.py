@@ -102,7 +102,7 @@ class TodaTeacherQesSchema(BaseSchema):
         "t_q9": str,
         "teacher_id": float,
         "time_stamp": str,
-        "year": int
+        "year": int  # このyear定義は回答年度ではなく、回答のターゲット年度
     }
 
     schema = Schema([

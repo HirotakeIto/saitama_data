@@ -8,7 +8,7 @@ class SchoolNameMixin:
     @staticmethod
     def assign_sch_name_to_sch_id(dfx: pd.DataFrame, sch_name_col='school_name', sch_id_col ='school_id'):
         school_master = (
-            pd.read_csv('data/db/todashi/school_master.csv')
+            pd.read_csv('data/db/info/school_master.csv')
             .set_index('school_name')
             ['school_id'].to_dict()
         )
@@ -23,7 +23,7 @@ class SchoolNameMixin:
     @staticmethod
     def assign_sch_num_to_sch_id(dfx: pd.DataFrame, sch_name_col='school_num', sch_id_col ='school_id'):
         school_master = (
-            pd.read_csv('data/db/todashi/school_master.csv')
+            pd.read_csv('data/db/info/school_master.csv')
             .set_index('school_num')
             ['school_id'].to_dict()
         )
