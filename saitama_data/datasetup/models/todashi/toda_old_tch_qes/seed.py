@@ -37,14 +37,15 @@ class TodashiKyouinQes2016(TodashiKyouinQes):
     def engineer(self, data):
         if type(data) != pd.DataFrame:
             raise TypeError
-        columns_mapper = {'学校ID': 'school_num',
-                          '学校名': 'school_name',
-                          '個人ID': 'teacher_id',
-                          '付箋': 'husen',
-                          '担任学年': 't_grade',  # 確か2015年度の担当
-                          '担任学級': 't_class',  # 確か2015年度の担当
-                          '担当教科': 'subject'
-                          }
+        columns_mapper = {
+            '学校ID': 'school_num',
+            '学校名': 'school_name',
+            '個人ID': 'teacher_id',
+            '付箋': 'husen',
+            '担任学年': 't_grade',  # 確か2015年度の担当
+            '担任学級': 't_class',  # 確か2015年度の担当
+            '担当教科': 'subject'
+        }
         data = data.rename(columns=columns_mapper)
         data['year'] = 2015  # 確か2015年度の担当だから
         self.add_convert_list(data)

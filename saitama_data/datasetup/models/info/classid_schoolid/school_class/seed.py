@@ -1,8 +1,10 @@
 import pandas as pd
 from saitama_data.datasetup.models.info.classid_schoolid.school_class.model import SchoolClass
+from saitama_data.datasetup.test.test import get_info_save
 
 __path__ = 'data/original_data/マスタデータ/学校マスタ/2018/過年度学校マスタ_2018.csv'
 __path2__ = 'data/original_data/マスタデータ/学校マスタ/過年度学校マスタ.csv'
+__path3__ = 'data/original_data/H31データ/H31データ/その他/学校マスタ/過年度学校マスタ_2019.csv'
 
 
 def convert_columns_type(data, convert_list: dict, errors='raise'):
@@ -23,6 +25,13 @@ def read_data_concat():
         pd.read_csv(__path2__)
         [['sch_id', '年度', 'grad_4', 'grad_5', 'grad_6', 'grad_7', 'grad_8', 'grad_9']]
     )
+    # school3 = (
+    #     pd.read_csv(__path3__, encoding='sjis')
+    #     [['sch_id', '年度', 'grad_4', 'grad_5', 'grad_6', 'grad_7', 'grad_8', 'grad_9']]
+    # )
+    # return (
+    #     school.append(school2).append(school3)
+    # )
     return (
         school.append(school2)
     )
@@ -67,12 +76,14 @@ class SchoolClassSeed:
         return school_class
 
 
-
-def seed():
+def seed(save_dry=True):
     sc_seed = SchoolClassSeed()
     sc = SchoolClass(sc_seed.data)
     sc.validate()
-    sc.save()
+    _, test = get_info_save(SchoolClass)
+    test(sc)
+    if save_dry is False:
+        sc.save()
 
 # def check():
 #     from saitama_data.datasetup.models.info.school_converter.seed_2017 import SchoolClass as SchoolClass2017

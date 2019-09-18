@@ -78,6 +78,28 @@ class SeitoInfo:
     pass
 
 
+def get_sex_class(data: pd.DataFrame):
+    df_sex = (
+        data[['id', 'sex']]
+        .assign(n_sex = lambda dfx: dfx.groupby(['id'])['sex'].transform('nunique'))
+        .sort_values('n_sex', ascending=False)
+        .groupby('id').head(1)
+        .drop('n_sex', axis=1)
+    )
+    df_class = (
+        data[['id', 'class']]
+        .assign(n_class = lambda dfx: dfx.groupby(['id'])['class'].transform('nunique'))
+        .sort_values('n_class', ascending=False)
+        .groupby('id').head(1)
+        .drop('n_class', axis=1)
+    )
+    return (
+        data[['id', 'grade', 'school_code', 'year']]
+        .merge(df_sex, on='id', how='left')
+        .merge(df_class, on='id', how='left')
+    )
+
+
 class SeitoInfo2017(SeitoInfo):
     """
     2017年度の生徒質問紙の情報から、SeitoInfoオブジェクトを作るもの。
@@ -117,16 +139,21 @@ class SeitoInfo2017(SeitoInfo):
         # read parametor
         mapper = self.mapper
         # engineer
-        data = data.drop_duplicates()
+        print('SeitoInfo, before build', data.shape)
+        # data = data.drop_duplicates()
         data['year'] = 2017
         data = (
             data
             .rename(columns=mapper)
             .astype(
-                { 'id': float, 'grade':  float, 'class':  float, 'sex':  float}
+                {'id': float, 'grade': float, 'class': float, 'sex': float}
             )
+            .pipe(get_sex_class)
         )
+        print('SeitoInfo, after build', data.shape)
         return data
+
+
 
 
 class SeitoInfo2016(SeitoInfo):
@@ -169,15 +196,18 @@ class SeitoInfo2016(SeitoInfo):
         # read parametor
         mapper = self.mapper
         # engineer
-        data = data.drop_duplicates()
+        print('SeitoInfo, before build', data.shape)
+        # data = data.drop_duplicates()
         data['year'] = 2016
         data = (
             data
             .rename(columns=mapper)
             .astype(
-                { 'id': float, 'grade':  float, 'class':  float, 'sex':  float}
+                {'id': float, 'grade': float, 'class': float, 'sex': float}
             )
+            .pipe(get_sex_class)
         )
+        print('SeitoInfo, after build', data.shape)
         return data
 
 

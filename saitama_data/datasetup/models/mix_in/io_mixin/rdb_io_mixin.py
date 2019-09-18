@@ -1,7 +1,12 @@
 """
 read()でconnectして
 dataのgetterでdataがNoneだったらstmに基づいて呼び出し。すでにあったらそのまま返すというのが良いだろういう結論に
+
+# TODO
+今はstmを色々な命令でちょっとずつ構築する感じにしているけど、もしかすると色々なメソッドでstmに関する
+フラグをいっぱい作ってstmを呼び出した時にsql文を生成する感じの方がいい鴨
 """
+
 import pandas as pd
 from sqlalchemy.sql import select
 from sqlalchemy import Table, MetaData
@@ -89,6 +94,11 @@ class RdbIOMixin(BaseIOMixIn):
         if target not in t.columns.keys():
             print('{target} is not {table} columns'.format(target=target, table=t.name))
         self.stm = stm.where(t.c[target].in_(l))
+        return self
+
+    def limit(self, limit_num: int):
+        stm = self.stm.limit(limit_num)
+        self.stm = stm
         return self
 
     # def where_in(self, target: str, l: list):

@@ -18,3 +18,7 @@ class CsvIOMixin(BaseIOMixIn):
     def pipe(self, func, *args, **kwargs):
         self.data = self.data.pipe(func, *args, **kwargs)
         return self
+
+    def limit(self, *argv, **kwrds):
+        # 未実装
+        return self

@@ -1,47 +1,35 @@
-import pandas as pd
-import numpy as np
+from saitama_data.datasetup.test.test import get_info_save
 from saitama_data.datasetup.models.master.id_master.model import IdMaster
 from saitama_data.datasetup.models.master.id_master._2017.seed import main2015, main2016, main2017
 from saitama_data.datasetup.models.master.id_master._2018.seed import main2018
+from saitama_data.datasetup.models.master.id_master._2019.seed import main2019
+_, valid = get_info_save(IdMaster)
 
-def seed():
-    def save(data, if_exists='replace'):
+
+def seed(save_dry=True):
+    def save(data, dry_save = False, if_exists='replace'):
         model = IdMaster(data)
         model.validate_convert()
-        model.save(if_exists)
+        valid(model=model, check_missing_src = True, check_missing_tar = False)
+        if dry_save is False:
+            model.save(if_exists)
         print('NUMBER OF DUPLICATED ID: ', data.duplicated(subset=['grade', 'year', 'id'], keep=False).sum())
 
-    save(main2015(), if_exists='replace')
-    save(main2016(), if_exists='append')
-    save(main2017(), if_exists='append')
-    save(main2018(), if_exists='append')
+    save(main2015(), dry_save=save_dry, if_exists='replace')
+    save(main2016(), dry_save=save_dry, if_exists='append')
+    save(main2017(), dry_save=save_dry, if_exists='append')
+    save(main2018(), dry_save=save_dry, if_exists='append')
+    save(main2019(), dry_save=save_dry, if_exists='append')
 
-    # # めっちゃ時間かかるけえ、あとでチェック
-    # validater = IdMaster()
-    # id_master = pd.DataFrame()
-    # for f in [main2015, main2016, main2017, main2018]:
-    #     tmp = f()
-    #     tmp = validater._adjust_schema(tmp)
-    #     validater._convert(tmp)
-    #     id_master = pd.concat([id_master, tmp], axis=0)
-    # validater._validate(id_master)
-    # model = IdMaster(id_master)
-    # model.save()
-    # print(id_master.groupby(['grade', 'year'])['id'].agg(['mean', 'count']))
-    # Debugしてただけだけど、将来こんな感じでvalidチェックをしたい
-    # aaa = (
-    #     IdMaster()
-    #     .read()
-    #     .data
-    #     # .drop_duplicates(subset=['grade', 'year', 'id'])
-    # )
-    # aaa.groupby(['grade', 'year']).size()
-    # bbb = aaa.groupby(['grade', 'year'])['id'].agg(['mean', 'count'])
-    # ccc = id_master.groupby(['grade', 'year'])['id'].agg(['mean', 'count'])
-    # ccc - bbb
-    # (
-    #     id_master.groupby(['grade','year', 'id']).size()
-    #     .pipe(lambda dfx: dfx[dfx!=1])
-    # )
-    # aaa.groupby(['grade', 'year'])[['school_id', 'city_id']].agg(['count', 'size']) - id_master.groupby(['grade', 'year'])[['school_id', 'city_id']].agg(['count', 'size'])
-    return
+    # # check
+    # aa = main2018()
+    # model = IdMaster(aa)
+    # import json
+    # from dftest import InfosDataFrame, test_infos
+    # from saitama_data.datasetup.test.test import get_object_name, get_testinfo_path
+    # model_name = get_object_name(model)
+    # with open(get_testinfo_path(model_name), mode='r', encoding='utf8') as f:
+    #     res = json.load(f)
+    # bb = InfosDataFrame.read_from_csv(res['save_path'])
+    # aa = InfosDataFrame.read_from_df(model.data, **res['args'])
+    # test_infos(aa, bb)

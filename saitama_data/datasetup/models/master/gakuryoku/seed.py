@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 from saitama_data.lib.read_config import ReadConfig2015, ReadConfig2017, ReadConfig2016, ReadConfig2018
 from saitama_data.datasetup.models.master.gakuryoku.model import Gakuryoku
+from saitama_data.datasetup.test.test import get_info_save
+_, test = get_info_save(Gakuryoku)
 # from .schema import GakuryokuSchema
 
 class Gakuryoku2016:
@@ -52,6 +54,11 @@ class Gakuryoku2017(Gakuryoku2016):
 class Gakuryoku2018(Gakuryoku2016):
     path_gakuryoku = '/IRT分析結果/SKP_IRT分析結果_2018.csv'
 
+class Gakuryoku2019(Gakuryoku2016):
+    path_gakuryoku = '/IRT分析結果/SKP_IRT分析結果_2019.csv'
+
+    def __init__(self):
+        self.path = './data/original_data/H31データ/H31データ/H31データ' + self.path_gakuryoku
 
 class Gakuryoku2015:
     need_original_col = ['H27個人番号', 'H27\n学年', 'kokugo_H27平均値', 'math_H27平均値', 'eng_H27平均値']
@@ -95,7 +102,7 @@ class Gakuryoku2015:
 
 
 
-def seed():
+def seed(save_dry = True):
     c = ReadConfig2015(path='saitama_data/setting.ini')
     c.get_setting()
     g2015 = Gakuryoku2015(c)
@@ -107,14 +114,17 @@ def seed():
     g2017 = Gakuryoku2017(c)
     c = ReadConfig2018(path='saitama_data/setting.ini')
     c.get_setting()
-    g2018 = Gakuryoku2018(c).build()
+    g2018 = Gakuryoku2018(c)
+    g2019 = Gakuryoku2019()
     data = pd.DataFrame()
-    for g in [g2015, g2016, g2017, g2018]: # これはこれで別メソッドとして切り分けるべきなのかもなー
+    for g in [g2015, g2016, g2017, g2018, g2019]: # これはこれで別メソッドとして切り分けるべきなのかもなー
         g.build()
         data = pd.concat([data, g.data], axis=0)
     gs = Gakuryoku(data)
     gs.validate()
-    gs.save()
+    test(gs)
+    if save_dry is False:
+        gs.save()
     return data
 
 

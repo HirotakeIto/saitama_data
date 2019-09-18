@@ -1,3 +1,13 @@
+"""
+TODO: あとで修正するときのメモ
+replacelist.xlsxは毎年形式が変わったちゃうから自分で作る
+
+作業手順
+1. まず元々のコードを入れ替えても通じるかどうかチェック
+2. 次に、replacelist.xlsxを2019年度版に変更してやり直す。
+
+
+"""
 import pandas as pd
 from saitama_data.datasetup.models.info.classid_schoolid.schid_schoolid.model import SchidSchoolid
 
@@ -64,8 +74,9 @@ class SchidSchoolidSeed:
 
 
 
-def seed():
+def seed(save_dry = True):
     sss = SchidSchoolidSeed()
     ss = SchidSchoolid(sss.data)
     ss.validate()
-    ss.save()
+    if save_dry is False:
+        ss.save()

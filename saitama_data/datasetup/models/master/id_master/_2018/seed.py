@@ -4,7 +4,7 @@ from saitama_data.datasetup.models.master.id_master.model import IdMaster
 from saitama_data.lib.read_config import ReadConfig2018
 # from saitama_data.datasetup.models.info.classid_schoolid.trash.seed_2018 import ClassIdSchoolId
 from saitama_data.datasetup.models.info import ClassIdSchoolId
-
+from saitama_data.datasetup.models.master.id_master._2017.seed import get_sex_class
 
 def convert_columns_type(data, convert_list: dict, errors='raise'):
     for c in convert_list.keys():
@@ -134,6 +134,7 @@ class SeitoInfo2018(SeitoInfo):
     need_original_col = ['answer_form_num', 'school_code', 'grade', 'class_num', 'gender']
     mapper = {'answer_form_num': 'id', 'school_code': 'school_code',
               'grade': 'grade', 'class_num': 'class', 'gender': 'sex'}
+    year_value = 2018
 
     def __init__(self, c):
         super(SeitoInfo2018, self).__init__()
@@ -154,25 +155,29 @@ class SeitoInfo2018(SeitoInfo):
     def read(self):
         # read parametor
         path = self.path
-        need_original_col = self.need_original_col
         # read
         data = pd.read_csv(path)
+        need_original_col = self.need_original_col
         data = data[need_original_col]
         return data
 
     def engineer(self, data):
         # read parametor
+        print('SeitoInfo, before build', data.shape)
         mapper = self.mapper
         # engineer
-        data = data.drop_duplicates()
-        data['year'] = 2018
+        # data = data.drop_duplicates()
+        # data['year'] = 2018
+        data['year'] = self.year_value
         data = (
             data
-            .rename(columns=mapper)
-            .astype(
-                { 'id': float, 'grade':  float, 'class':  float, 'sex':  float}
+                .rename(columns=mapper)
+                .astype(
+                {'id': float, 'grade': float, 'class': float, 'sex': float}
             )
+                .pipe(get_sex_class)
         )
+        print('SeitoInfo, After build', data.shape)
         return data
 
 
