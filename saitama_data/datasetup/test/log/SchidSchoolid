@@ -1,0 +1,1 @@
+{"model_name": "SchidSchoolid", "save_path": "saitama_data/datasetup/test/log/SchidSchoolid.csv", "args": {"func_list": ["count"], "func_list_groupby": ["mean"], "key_groupby": ["sch_id"]}}

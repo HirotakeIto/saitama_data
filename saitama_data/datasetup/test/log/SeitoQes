@@ -1,0 +1,1 @@
+{"model_name": "SeitoQes", "save_path": "saitama_data/datasetup/test/log/SeitoQes.csv", "args": {"func_list": ["mean", "std", "count"], "func_list_groupby": ["mean", "std", "count"], "key_groupby": ["grade", "year"]}}

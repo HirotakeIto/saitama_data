@@ -1,0 +1,1 @@
+{"model_name": "ClassIdSchoolId", "save_path": "saitama_data/datasetup/test/log/ClassIdSchoolId.csv", "args": {"func_list": ["count"], "func_list_groupby": [], "key_groupby": []}}
