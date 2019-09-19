@@ -1,0 +1,4 @@
+variable,value,func,name
+class_id,3318,count,class_id_count
+school_id,3279,count,school_id_count
+city_id,3267,count,city_id_count
