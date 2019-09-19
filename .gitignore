@@ -16,6 +16,7 @@
 
 # 無視するファイル
 *.csv
+!./saitama_data/datasetup/test/log/*.csv
 *.xlsx
 *.zip
 *.gzip
