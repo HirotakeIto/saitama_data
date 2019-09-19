@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from saitama_data.datasetup.models.info.correspondence.model import Correspondence
+from saitama_data.lib.safe_path import safe_path
 
 
 class SeitoQes2018:
@@ -25,7 +26,7 @@ class SeitoQes2018:
         path = self.path
         need_original_col = self.need_original_col
         # start
-        data = pd.read_csv(path)
+        data = pd.read_csv(safe_path(path))
         return data[need_original_col]
 
     def engineer(self, data, correspondence):

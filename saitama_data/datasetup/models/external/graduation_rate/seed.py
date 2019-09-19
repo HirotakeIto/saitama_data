@@ -1,6 +1,7 @@
 import pandas as pd
 from saitama_data.datasetup.models.external.graduation_rate.schema import GraduationRateSchema
 from saitama_data.datasetup.models.info.city.model import City
+from saitama_data.lib.safe_path import safe_path
 
 
 def get_data():

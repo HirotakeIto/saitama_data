@@ -3,7 +3,6 @@ from saitama_data.datasetup.models.info import seed_school_class, seed_schid_sch
 from saitama_data.datasetup.models.master import seito_qes_seed, gakuryoku_seed, id_master_seed, school_qes_seed
 
 
-
 """
 ここは順番を考慮する必要あり
 

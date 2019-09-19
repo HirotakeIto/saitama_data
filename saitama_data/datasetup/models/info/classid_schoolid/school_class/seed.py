@@ -1,6 +1,7 @@
 import pandas as pd
 from saitama_data.datasetup.models.info.classid_schoolid.school_class.model import SchoolClass
 from saitama_data.datasetup.test.test import get_info_save
+from saitama_data.lib.safe_path import safe_path
 
 __path__ = 'data/original_data/マスタデータ/学校マスタ/2018/過年度学校マスタ_2018.csv'
 __path2__ = 'data/original_data/マスタデータ/学校マスタ/過年度学校マスタ.csv'
@@ -18,11 +19,11 @@ def convert_columns_type(data, convert_list: dict, errors='raise'):
 
 def read_data_concat():
     school = (
-        pd.read_csv(__path__, encoding='sjis')
+        pd.read_csv(safe_path(__path__), encoding='sjis')
         [['sch_id', '年度', 'grad_4', 'grad_5', 'grad_6', 'grad_7', 'grad_8', 'grad_9']]
     )
     school2 = (
-        pd.read_csv(__path2__)
+        pd.read_csv(safe_path(__path2__))
         [['sch_id', '年度', 'grad_4', 'grad_5', 'grad_6', 'grad_7', 'grad_8', 'grad_9']]
     )
     # school3 = (

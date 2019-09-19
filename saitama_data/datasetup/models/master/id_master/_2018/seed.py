@@ -5,6 +5,8 @@ from saitama_data.lib.read_config import ReadConfig2018
 # from saitama_data.datasetup.models.info.classid_schoolid.trash.seed_2018 import ClassIdSchoolId
 from saitama_data.datasetup.models.info import ClassIdSchoolId
 from saitama_data.datasetup.models.master.id_master._2017.seed import get_sex_class
+from saitama_data.lib.safe_path import safe_path
+
 
 def convert_columns_type(data, convert_list: dict, errors='raise'):
     for c in convert_list.keys():
@@ -94,7 +96,7 @@ class MasterId:
         path = self.path
         need_original_col = self.need_original_col
         #
-        dt = pd.read_csv(path)
+        dt = pd.read_csv(safe_path(path))
         return dt
 
     def engineer(self, dt):
@@ -156,7 +158,7 @@ class SeitoInfo2018(SeitoInfo):
         # read parametor
         path = self.path
         # read
-        data = pd.read_csv(path)
+        data = pd.read_csv(safe_path(path))
         need_original_col = self.need_original_col
         data = data[need_original_col]
         return data

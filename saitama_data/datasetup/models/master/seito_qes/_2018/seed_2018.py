@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from saitama_data.lib.read_config import ReadConfig2018
 from saitama_data.datasetup.models.master.seito_qes._2017.seed_2017 import Correspondence, main2017, main20152016
-
+from saitama_data.lib.safe_path import safe_path
 
 class SeitoQes2018:
     path_seitoqes = '/児童生徒質問紙回答データ/scoring_info_feedback_2018.csv'
@@ -26,7 +26,7 @@ class SeitoQes2018:
         path = self.path
         need_original_col = self.need_original_col
         # start
-        data = pd.read_csv(path)
+        data = pd.read_csv(safe_path(path))
         return data[need_original_col]
 
     def engineer(self, data, correspondence):

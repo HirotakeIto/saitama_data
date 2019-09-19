@@ -2,7 +2,7 @@ import pandas as pd
 from saitama_data.lib.read_config import ReadConfig2018
 from saitama_data.datasetup.models.info.classid_schoolid.school_class.model import SchoolClassSchema
 from saitama_data.datasetup.models.info.classid_schoolid.schid_schoolid.model import SchidSchoolidSchema
-
+from saitama_data.lib.safe_path import safe_path
 
 
 def convert_columns_type(data, convert_list: dict, errors='raise'):

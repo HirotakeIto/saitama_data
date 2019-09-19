@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 from saitama_data.datasetup.models.mix_in.io_mixin.basic import BaseIOMixIn
+from saitama_data.lib.safe_path import safe_path
 
 
 class CsvIOMixin(BaseIOMixIn):
@@ -8,7 +9,7 @@ class CsvIOMixin(BaseIOMixIn):
     path というアトリビューションがあること前提の設計
     """
     def read(self, **argv):
-        self.data = pd.read_csv(filepath_or_buffer=self.path, **argv)
+        self.data = pd.read_csv(filepath_or_buffer=safe_path(self.path), **argv)
         return self
 
     def save(self, index=False, **argv):

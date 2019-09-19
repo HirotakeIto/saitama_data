@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from saitama_data.lib.read_config import ReadConfig2017
-
+from saitama_data.lib.safe_path import safe_path
 
 class SchoolClass:
     """
@@ -20,7 +20,7 @@ class SchoolClass:
 
     @staticmethod
     def get_school_class(path):
-        school = pd.read_csv(path)
+        school = pd.read_csv(safe_path(path))
         school = school[['sch_id', '年度', 'grad_4', 'grad_5', 'grad_6', 'grad_7', 'grad_8', 'grad_9']]
         school_class = pd.DataFrame(columns=['sch_id', 'year', 'class_id'])
         for grad in ['grad_4', 'grad_5', 'grad_6', 'grad_7', 'grad_8', 'grad_9']:

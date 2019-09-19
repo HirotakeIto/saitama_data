@@ -1,6 +1,7 @@
 import pandas as pd
 from functools import reduce
 import re
+from saitama_data.lib.safe_path import safe_path
 
 
 class EyeData20162017:

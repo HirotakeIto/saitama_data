@@ -10,6 +10,7 @@ from saitama_data.datasetup.models.master.id_master.model import IdMaster
 from saitama_data.lib.read_config import ReadConfig2016, ReadConfig2017
 # from saitama_data.datasetup.models.info.classid_schoolid.trash.seed_2017 import ClassIdSchoolId
 from saitama_data.datasetup.models.info import ClassIdSchoolId
+from saitama_data.lib.safe_path import safe_path
 
 def get_uniqueness(data, unique_key):
     data = data.sort_values(['sex'])
@@ -47,7 +48,7 @@ class MasterId:
         path = self.path
         need_original_col = self.need_original_col
         #
-        dt = pd.read_csv(path)
+        dt = pd.read_csv(safe_path(path))
         return dt
 
     def engineer(self, dt):
@@ -131,7 +132,7 @@ class SeitoInfo2017(SeitoInfo):
         path = self.path
         need_original_col = self.need_original_col
         # read
-        data = pd.read_csv(path)
+        data = pd.read_csv(safe_path(path))
         data = data[need_original_col]
         return data
 
@@ -188,7 +189,7 @@ class SeitoInfo2016(SeitoInfo):
         path = self.path
         need_original_col = self.need_original_col
         # read
-        data = pd.read_csv(path)
+        data = pd.read_csv(safe_path(path))
         data = data[need_original_col]
         return data
 
@@ -294,7 +295,7 @@ class IdMaster2015(IdMaster):
         path = gakuryoku_path
         need_original_col = ['市町村教育委員会', '学校コード']
         mapper = {'市町村教育委員会': 'city_id', '学校コード': 'school_id'}
-        data = pd.read_csv(path)[need_original_col]
+        data = pd.read_csv(safe_path(path))[need_original_col]
         data = data.rename(columns=mapper)
         school_city = data[['school_id', 'city_id']].drop_duplicates()
         # next
@@ -309,7 +310,7 @@ class IdMaster2015(IdMaster):
         need_original_col = ['H27学校コード', 'H27個人番号', 'H27\n学年', 'H27\n組', 'H27\n性別']
         mapper = {'H27学校コード': 'school_id', 'H27個人番号': 'id',
                   'H27\n学年': 'grade', 'H27\n組': 'class', 'H27\n性別': 'sex'}
-        dt = pd.read_csv(path)[need_original_col]
+        dt = pd.read_csv(safe_path(path))[need_original_col]
         dt = dt.dropna(how='all')
         dt = dt.rename(columns=mapper)
         dt = dt.replace('-', np.nan)
@@ -389,7 +390,7 @@ def main2015():
 # need_original_col = ['answer_form_num', 'school_code', 'grade', 'class_num', 'gender']
 # mapper = {'answer_form_num': 'id', 'school_code': 'school_code',
 #           'grade': 'grade', 'class_num': 'class', 'gender': 'sex'}
-# a = pd.read_csv(path)
+# a = pd.read_csv(safe_path(path))
 # a = a[need_original_col]
 # a = a.rename(columns=mapper)
 # a = a.loc[a['sex']!=3, :]

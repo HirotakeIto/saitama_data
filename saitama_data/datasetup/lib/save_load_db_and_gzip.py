@@ -8,6 +8,7 @@ from sqlalchemy import Table, MetaData
 from sqlalchemy.schema import CreateSchema
 from sqlalchemy.sql.elements import literal_column
 from saitama_data.sql.connect_postgres import to_sql
+from saitama_data.lib.safe_path import safe_path
 
 
 def helper_get_tablename_to_file_path(root_dir, schema_name, table_name):

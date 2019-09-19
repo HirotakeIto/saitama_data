@@ -1,5 +1,6 @@
 import pandas as pd
 from saitama_data.datasetup.models.info.correspondence.model import Correspondence
+from saitama_data.lib.safe_path import safe_path
 
 def seed_builder(path, year):
     # path = './data/info/seito_2017.csv'
@@ -8,7 +9,7 @@ def seed_builder(path, year):
     need_col = ['qes', 'question_id']
     need_original_col = ['カラム名2', '小4', '小5', '小6', '中1', '中2', '中3']
     data = (
-        pd.read_csv(path)
+        pd.read_csv(safe_path(path))
         [need_original_col]
     )
     correspondence = pd.DataFrame()
@@ -66,7 +67,7 @@ def seed(save_dry=True):
 #         path = self.path
 #         need_original_col = self.need_original_col
 #         # start
-#         data = pd.read_csv(path)
+#         data = pd.read_csv(safe_path(path))
 #         return data[need_original_col]
 #
 #     def engineer(self, data):

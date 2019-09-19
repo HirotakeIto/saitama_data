@@ -3,6 +3,8 @@ import numpy as np
 from saitama_data.lib.read_config import ReadConfig2015, ReadConfig2017, ReadConfig2016, ReadConfig2018
 from saitama_data.datasetup.models.master.gakuryoku.model import Gakuryoku
 from saitama_data.datasetup.test.test import get_info_save
+from saitama_data.lib.safe_path import safe_path
+
 _, test = get_info_save(Gakuryoku)
 # from .schema import GakuryokuSchema
 
@@ -29,7 +31,7 @@ class Gakuryoku2016:
         path =self.path
         need_original_col = self.need_original_col
         # start
-        data = pd.read_csv(path)
+        data = pd.read_csv(safe_path(path))
         # self.valid_columnn_check(data, need_original_col)
         return data[need_original_col]
 
@@ -88,7 +90,7 @@ class Gakuryoku2015:
         mapper = self.mapper
         path = self.path
         # start
-        data = pd.read_csv(path)[need_original_col]
+        data = pd.read_csv(safe_path(path))[need_original_col]
         data = data.rename(columns=mapper)
         data = data.replace('-', np.nan)
         replace_target = ['kokugo_level', 'math_level', 'eng_level']

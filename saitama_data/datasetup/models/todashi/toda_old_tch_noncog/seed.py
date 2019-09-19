@@ -5,6 +5,7 @@ from saitama_data.lib.read_config import ReadConfigTodashi20162017
 from saitama_data.datasetup.makedata.lib.validation import DataFrameGetter
 from saitama_data.datasetup.models.todashi.toda_old_tch_noncog import model
 from saitama_data.datasetup.models.todashi.engineer_mixin import school_name_mixin
+from saitama_data.lib.safe_path import safe_path
 [reload(a) for a in [model, school_name_mixin]]
 TodaOldTchNoncog = model.TodaOldTchNoncog
 SchoolNameMixin = school_name_mixin.SchoolNameMixin

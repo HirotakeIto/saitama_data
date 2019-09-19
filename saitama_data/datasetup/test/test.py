@@ -37,9 +37,9 @@ def valid(model, **argv):
 
 def get_info_save(cls):
     if cls.__name__ in ['Gakuryoku', 'IdMaster', 'SeitoQes']:
-        func_list = ['mean', 'std', 'count']
+        func_list = ['mean', 'count']
         key_groupby = ['grade', 'year']
-        func_list_groupby = ['mean', 'std', 'count']
+        func_list_groupby = ['mean', 'count']
     elif cls.__name__ in ['SchoolQes']:  # SchoolQesは文字列だらけでmeanとか計算できない
         func_list = ['count']
         key_groupby = ['key1', 'year_answer']
