@@ -4,6 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pylint = "*"
 
 [packages]
 ipython = "==6.2"
@@ -15,7 +16,8 @@ camel = "*"
 xlrd = "==1.1.0"
 tqdm = "==4.19.5"
 openpyxl = "==2.6.2"
-teacher-va = {editable = true,git = "https://github.com/HirotakeIto/teacher_va.git"}
+jupyterlab = "*"
+dataclasses = "*"
 
 [requires]
 python_version = "3.6"
