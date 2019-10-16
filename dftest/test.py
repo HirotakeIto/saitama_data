@@ -34,7 +34,7 @@ class InfoValidation:
 
     @staticmethod
     def is_equal(val_src, val_tar, tol = 0.0001):
-        """この関数はis_equalに返すだけなんだから、TrueとFalseとかだけ返すようにすべき"""
+        """この関数はis_equalに返すだけなんだから、TrueとFalseとかだけ返すようにすべき?"""
         TestResult = namedtuple('TestResult', ('result', 'message'))  # この辺汚いな。。。Test result
         if type(val_src) != type(val_tar):
             return TestResult(False, 'cls mismatch')
@@ -51,8 +51,12 @@ class InfoValidation:
         return idf.have_name(name)
 
 
-def test_infos(src_idf: InfosDataFrame, tar_idf: InfosDataFrame, check_missing_src = True, check_missing_tar = True):
+def test_infos(
+    src_idf: InfosDataFrame, tar_idf: InfosDataFrame, check_missing_src = True, check_missing_tar = True,
+    fixed_messeages_pre='', fixed_messeages_post=''
+    ):
     messeages = []
+    messeages.append(fixed_messeages_pre)
     for src_is in tqdm(src_idf.infos):
         if tar_idf.have_name(src_is.test_name):
             tar_is = tar_idf.get_info_from_name(src_is.test_name)
@@ -70,4 +74,5 @@ def test_infos(src_idf: InfosDataFrame, tar_idf: InfosDataFrame, check_missing_s
         for name in set(tar_names).difference(set(src_names)):
             messeage = 'Key Error: ' + name + ' is missing from source infos'
             messeages.append(messeage)
+    messeages.append(fixed_messeages_post)
     print('\n'.join(messeages))

@@ -1,6 +1,7 @@
 import pandas as pd
 from collections import namedtuple
 from dftest.lib import to_string
+from saitama_data.lib.safe_path import safe_path
 
 __VALUE_COLUMN_NAME__ = 'variable'
 __VALUE_NAME__ = 'value'
@@ -149,7 +150,7 @@ class InfosDataFrame(pd.DataFrame):
 
     @classmethod
     def read_from_csv(cls, path):
-        return cls(pd.read_csv(path))
+        return cls(pd.read_csv(safe_path(path)))
 
     @property
     def infos(self):
