@@ -1,7 +1,7 @@
 from saitama_data.datasetup.models.info import seed_school_class, seed_schid_schoolid, \
     seed_classid_schoolid, seed_correspondence, seed_school_qes_info
 from saitama_data.datasetup.models.master import seito_qes_seed, gakuryoku_seed, id_master_seed, school_qes_seed
-
+from saitama_data.datasetup.models.work import seito_qes_sosei_seed
 
 """
 ここは順番を考慮する必要あり
@@ -23,6 +23,8 @@ def seed_master(save_dry=True):
     seito_qes_seed(save_dry)
     seed_school_qes_info()
     # school_qes_seed()
+    seito_qes_sosei_seed(save_dry)
+
 
 def seed_info_master(save_dry=True):
     # save_dry = True
