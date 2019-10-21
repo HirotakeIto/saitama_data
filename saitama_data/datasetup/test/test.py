@@ -26,6 +26,7 @@ def save(model, func_list, func_list_groupby, key_groupby):
         }, f, ensure_ascii=False)
 
 
+# todo: Add type hint
 def valid(model, **argv):
     model_name = get_object_name(model)
     with open(get_testinfo_path(model_name), mode='r', encoding='utf8') as f:
@@ -36,7 +37,7 @@ def valid(model, **argv):
 
 
 def get_info_save(cls):
-    if cls.__name__ in ['Gakuryoku', 'IdMaster', 'SeitoQes']:
+    if cls.__name__ in ['Gakuryoku', 'IdMaster', 'SeitoQes', 'SeitoQesSosei']:
         func_list = ['mean', 'count']
         key_groupby = ['grade', 'year']
         func_list_groupby = ['mean', 'count']
@@ -55,13 +56,16 @@ def get_info_save(cls):
     save_func = lambda model: save(
         model=model, func_list=func_list, key_groupby=key_groupby, func_list_groupby=func_list_groupby
     )
-    valid_func = lambda model, **argv: valid(model=model, **argv)
+    fixed_messeages_pre="Test about {0} start....".format(cls.__name__)
+    valid_func = lambda model, **argv: valid(model=model, fixed_messeages_pre=fixed_messeages_pre, **argv)
     return save_func, valid_func
+
 
 def valid_all():
     from saitama_data.datasetup.models.master import IdMaster, SeitoQes, SchoolQes, Gakuryoku
     from saitama_data.datasetup.models.info.classid_schoolid import ClassIdSchoolId, SchidSchoolid, SchoolClass
-    test_target_list = [Gakuryoku, IdMaster, SchoolQes]
+    from saitama_data.datasetup.models import SeitoQesSosei
+    test_target_list = [Gakuryoku, IdMaster, SchoolQes, SeitoQesSosei]
     for target_cls in test_target_list:
         target = target_cls().read()
         _, valid1 = get_info_save(target_cls)
@@ -91,8 +95,9 @@ def valid_all():
 def save_valid():
     from saitama_data.datasetup.models.master import IdMaster, SeitoQes, SchoolQes, Gakuryoku
     from saitama_data.datasetup.models.info.classid_schoolid import ClassIdSchoolId, SchidSchoolid, SchoolClass
-    test_target_list = [Gakuryoku, IdMaster, SchoolQes]
-    # test_target_list = [IdMaster]
+    from saitama_data.datasetup.models import SeitoQesSosei
+    test_target_list = [Gakuryoku, IdMaster, SchoolQes, SeitoQesSosei]
+    test_target_list = [SeitoQesSosei]
     for target_cls in test_target_list:
         target = target_cls().read()
         save1, valid1 = get_info_save(target_cls)
