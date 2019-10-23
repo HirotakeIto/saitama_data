@@ -18,4 +18,7 @@ class SchidSchoolidSchema(BaseSchema):
 
 class SchidSchoolid(CsvIOMixin, SchidSchoolidSchema):
     path = './data/db/info/schid_schoolid.csv'
-    pass
+
+    @property
+    def mapper_sch_id_school_id(self):
+        return {x[0]: x[1] for x in self.data[['sch_id', 'school_id']].dropna().astype(int).values}

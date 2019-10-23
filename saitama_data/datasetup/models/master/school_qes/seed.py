@@ -73,7 +73,7 @@ def seed():
             .rename(columns=columns_no_content_mapper_key2)
             .append(other=df)
         )
-    mapper_sch_id_school_id = SchidSchoolid(c).mapper_sch_id_school_id
+    mapper_sch_id_school_id = SchidSchoolid().read().mapper_sch_id_school_id
     def item_to_na_if_not_in_list(dfx, _target, _list):
         dfx.loc[dfx[_target].isin(_list) == False, _target] = pd.np.nan
         return dfx

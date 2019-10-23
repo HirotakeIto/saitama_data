@@ -22,7 +22,7 @@ def seed_master(save_dry=True):
     gakuryoku_seed(save_dry)
     seito_qes_seed(save_dry)
     seed_school_qes_info()
-    # school_qes_seed()
+    school_qes_seed()
     seito_qes_sosei_seed(save_dry)
 
 
