@@ -7,6 +7,7 @@ __all_question_info_dict_list__ = [
     {'path': 'data/info/学校質問/work/2016/school_qes_2016.xlsx', 'sheets': ['2016小学校解答用紙', '2016中学校解答用紙']},
     {'path': 'data/info/学校質問/work/2017/school_qes_2017.xlsx', 'sheets': ['2017小学校解答用紙', '2017中学校解答用紙']},
     {'path': 'data/info/学校質問/work/2018/school_qes_2018.xlsx', 'sheets': ['2018小学校解答用紙', '2018中学校解答用紙']},
+    {'path': 'data/info/学校質問/work/2019/school_qes_2019.xlsx', 'sheets': ['2019小学校解答用紙', '2019中学校解答用紙']},
 ]
 __path_question_to_sq__ = 'data/info/学校質問/work/sq_regex.xlsx'
 
@@ -62,7 +63,7 @@ def seed():
     ## add sq to df_qes
     df_qes['sq'] = pd.np.nan # reset
     for info in df_info.to_dict(orient='record'):
-        slicing = df_qes['explanation_all'].str.contains(info['exp_reg'])
+        slicing = df_qes['explanation_all'].str.contains(info['exp_reg']) == True
         if df_qes.loc[slicing, 'sq'].notna().sum() > 0:
             print('{sq}: でsqが登録されています。更新をスキップします。'.format(sq = info))
             print('すでに入力があったものは次の通りです')

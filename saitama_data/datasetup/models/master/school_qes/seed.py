@@ -4,6 +4,7 @@ from tqdm import tqdm
 from saitama_data.datasetup.models.info.classid_schoolid import SchidSchoolid
 from saitama_data.datasetup.models.master.school_qes.model import SchoolQes
 from saitama_data.lib.read_config import ReadConfig2018
+from saitama_data.lib.safe_path import safe_path
 import os
 
 
@@ -20,14 +21,15 @@ def seed():
     c = ReadConfig2018(path='saitama_data/setting.ini').get_setting()
     def get_path_list():
         _file_list = []
-        for _year in ['2016', '2017', '2018']:
+        for _year in ['2016', '2017', '2018', '2019']:
             file_path = {
                 'root': 'data/original_data',
+                '2019': 'H31データ/H31データ/H31データ/学校質問紙回答データ',
                 '2018': 'H30データ/学校質問紙回答データ',
                 '2017': 'H29データ/学校質問紙回答データ',
                 '2016': 'H28データ/学校質問紙回答データ'
             }
-            folder = os.path.join(file_path['root'], file_path[_year])
+            folder = safe_path(os.path.join(file_path['root'], file_path[_year]))
             for _file in os.listdir(folder):
                 if _file.count('xlsx') > 0:
                     if _file.count('小学校') > 0:
