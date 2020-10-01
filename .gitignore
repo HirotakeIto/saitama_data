@@ -16,8 +16,6 @@
 
 # 無視するファイル
 *.csv
-!./saitama_data/datasetup/test/log/*.csv
-!tests/snapshots/snap_test/*.csv
 *.xlsx
 *.zip
 *.gzip
@@ -33,11 +31,9 @@ saitama_data/setting.ini
 # 例外処理
 !data/info/
 data/info/*
-!data/info/seito_20*.csv
-!data/info/school_20*.csv
-!data/info/生徒質問
-data/info/生徒質問/*
-!data/info/生徒質問/seito_20*.csv
-!data/info/学校質問
-data/info/学校質問/*
-!data/info/学校質問/qes_info.xlsx
+!data/info/seito_qes
+!data/info/school_qes
+!data/info/seito_qes/*
+!data/info/school_qes/*
+!./saitama_data/datasetup/test/log/*.csv
+!tests/snapshots/snap_test/*.csv

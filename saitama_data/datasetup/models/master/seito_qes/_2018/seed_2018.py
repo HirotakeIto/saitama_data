@@ -73,7 +73,7 @@ class SeitoQes2018:
 
 
 class Correspondence2018(Correspondence):
-    path_correspondence = '/seito_2018.csv'
+    path_correspondence = '/seito_qes/seito_2018.csv'
 
 
 def main2018(profileing=False):

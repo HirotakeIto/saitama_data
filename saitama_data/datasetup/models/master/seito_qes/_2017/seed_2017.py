@@ -7,7 +7,7 @@ class Correspondence:
     """
     質問番号と質問内容の対応表を作成する
     """
-    path_correspondence = '/seito_2017.csv'
+    path_correspondence = '/seito_qes/seito_2017.csv'
     need_col = ['qes', 'question_id']
     need_original_col = ['カラム名2', '小4', '小5', '小6', '中1', '中2', '中3']
 
