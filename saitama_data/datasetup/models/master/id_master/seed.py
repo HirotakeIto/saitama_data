@@ -1,16 +1,14 @@
-from saitama_data.datasetup.test.test import get_info_save
+import subprocess
 from saitama_data.datasetup.models.master.id_master.model import IdMaster
 from saitama_data.datasetup.models.master.id_master._2017.seed import main2015, main2016, main2017
 from saitama_data.datasetup.models.master.id_master._2018.seed import main2018
 from saitama_data.datasetup.models.master.id_master._2019.seed import main2019
-_, valid = get_info_save(IdMaster)
 
 
 def seed(save_dry=True):
     def save(data, dry_save = False, if_exists='replace'):
         model = IdMaster(data)
         model.validate_convert()
-        valid(model=model, check_missing_src = True, check_missing_tar = False)
         if dry_save is False:
             model.save(if_exists)
         print('NUMBER OF DUPLICATED ID: ', data.duplicated(subset=['grade', 'year', 'id'], keep=False).sum())
@@ -20,6 +18,9 @@ def seed(save_dry=True):
     save(main2017(), dry_save=save_dry, if_exists='append')
     save(main2018(), dry_save=save_dry, if_exists='append')
     save(main2019(), dry_save=save_dry, if_exists='append')
+    # res = subprocess.call(["pytest", "tests/test.py::test_idmaster"])
+    # if res != 0:
+    #     raise ValueError("Testに失敗しました")
 
     # # check
     # aa = main2018()

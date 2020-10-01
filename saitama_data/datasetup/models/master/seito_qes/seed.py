@@ -1,15 +1,12 @@
-from saitama_data.datasetup.test.test import get_info_save
 from saitama_data.datasetup.models.master.seito_qes._2017.seed_2017 import main2017, main20152016
 from saitama_data.datasetup.models.master.seito_qes._2018.seed_2018 import main2018
 from saitama_data.datasetup.models.master.seito_qes._2019.seed_2019 import main2019
 from saitama_data.datasetup.models.master.seito_qes.model import SeitoQes
-_, valid = get_info_save(SeitoQes)
 
 def seed(save_dry=True):
     def save(data, dry_save = False, if_exists='replace'):
         model = SeitoQes(data).adjust_schema().convert()
         model.validate_convert()
-        valid(model=model, check_missing_src = True, check_missing_tar = False)
         if dry_save is False:
             model.save(if_exists)
         print('NUMBER OF DUPLICATED ID: ', data.duplicated(subset=['grade', 'year', 'id'], keep=False).sum())

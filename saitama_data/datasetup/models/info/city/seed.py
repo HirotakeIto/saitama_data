@@ -2,7 +2,7 @@ import pandas as pd
 from saitama_data.datasetup.models.info.city.schema import CitySchema
 
 def get_data():
-    path = 'data/original_data/マスタデータ/replacelist.xlsx'
+    path = 'data/original_data/マスタデータ/replacelist/replacelist.xlsx'
     data = (
         pd.read_excel(path, '市町村教育委員会')
         .rename(columns={

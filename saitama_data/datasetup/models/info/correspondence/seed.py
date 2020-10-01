@@ -29,9 +29,9 @@ def seed_builder(path, year):
 
 def seed(save_dry=True):
     builder_info_list = [
-        {'path': './data/info/seito_2017.csv', 'year': 2017},
-        {'path': './data/info/seito_2018.csv', 'year': 2018},
-        {'path': './data/info/生徒質問/seito_2019.csv', 'year': 2019},
+        {'path': './data/info/seito_qes/seito_2017.csv', 'year': 2017},
+        {'path': './data/info/seito_qes/seito_2018.csv', 'year': 2018},
+        {'path': './data/info/seito_qes/seito_2019.csv', 'year': 2019},
     ]
     df = pd.DataFrame()
     for builder_info in builder_info_list:

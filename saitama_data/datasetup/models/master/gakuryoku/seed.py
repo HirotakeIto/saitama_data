@@ -1,12 +1,10 @@
 import pandas as pd
 import numpy as np
+import subprocess
 from saitama_data.lib.read_config import ReadConfig2015, ReadConfig2017, ReadConfig2016, ReadConfig2018
 from saitama_data.datasetup.models.master.gakuryoku.model import Gakuryoku
-from saitama_data.datasetup.test.test import get_info_save
 from saitama_data.lib.safe_path import safe_path
 
-_, test = get_info_save(Gakuryoku)
-# from .schema import GakuryokuSchema
 
 class Gakuryoku2016:
     path_gakuryoku = '/IRT分析結果/SKP_IRT分析結果_2016.csv'
@@ -124,9 +122,11 @@ def seed(save_dry = True):
         data = pd.concat([data, g.data], axis=0)
     gs = Gakuryoku(data)
     gs.validate()
-    test(gs)
     if save_dry is False:
         gs.save()
+    # res = subprocess.call(["pytest", "tests/test.py::test_gakuryoku"])
+    # if res != 0:
+    #     raise ValueError("Testに失敗しました")
     return data
 
 
