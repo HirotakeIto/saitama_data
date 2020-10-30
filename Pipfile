@@ -19,6 +19,7 @@ jupyterlab = "*"
 dataclasses = "*"
 ipython = "==7.13.0"
 snapshottest = "*"
+addict = "*"
 
 [requires]
 python_version = "3.6"

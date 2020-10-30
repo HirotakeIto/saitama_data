@@ -1,6 +1,7 @@
 from saitama_data.datasetup.models.master.seito_qes._2017.seed_2017 import main2017, main20152016
 from saitama_data.datasetup.models.master.seito_qes._2018.seed_2018 import main2018
 from saitama_data.datasetup.models.master.seito_qes._2019.seed_2019 import main2019
+from saitama_data.datasetup.models.master.seito_qes._2020.seed_2020 import main2020
 from saitama_data.datasetup.models.master.seito_qes.model import SeitoQes
 
 def seed(save_dry=True):
@@ -15,6 +16,7 @@ def seed(save_dry=True):
     save(main2017(), dry_save= save_dry, if_exists='append')
     save(main2018(), dry_save= save_dry, if_exists='append')
     save(main2019(), dry_save= save_dry, if_exists='append')
+    save(main2020(), dry_save= save_dry, if_exists='append')
 
 
 # def seed():

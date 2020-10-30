@@ -3,6 +3,7 @@ from saitama_data.datasetup.models.master.id_master.model import IdMaster
 from saitama_data.datasetup.models.master.id_master._2017.seed import main2015, main2016, main2017
 from saitama_data.datasetup.models.master.id_master._2018.seed import main2018
 from saitama_data.datasetup.models.master.id_master._2019.seed import main2019
+from saitama_data.datasetup.models.master.id_master._2020.seed import main2020
 
 
 def seed(save_dry=True):
@@ -18,6 +19,7 @@ def seed(save_dry=True):
     save(main2017(), dry_save=save_dry, if_exists='append')
     save(main2018(), dry_save=save_dry, if_exists='append')
     save(main2019(), dry_save=save_dry, if_exists='append')
+    save(main2020(), dry_save=save_dry, if_exists='append')
     # res = subprocess.call(["pytest", "tests/test.py::test_idmaster"])
     # if res != 0:
     #     raise ValueError("Testに失敗しました")

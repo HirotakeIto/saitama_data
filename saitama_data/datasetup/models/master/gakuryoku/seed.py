@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import subprocess
-from saitama_data.lib.read_config import ReadConfig2015, ReadConfig2017, ReadConfig2016, ReadConfig2018
+from saitama_data.lib.read_config import config, ReadConfig2015, ReadConfig2017, ReadConfig2016, ReadConfig2018
 from saitama_data.datasetup.models.master.gakuryoku.model import Gakuryoku
 from saitama_data.lib.safe_path import safe_path
 
@@ -60,6 +60,10 @@ class Gakuryoku2019(Gakuryoku2016):
     def __init__(self):
         self.path = './data/original_data/H31データ/H31データ/H31データ' + self.path_gakuryoku
 
+class Gakuryoku2020(Gakuryoku2016):
+    def __init__(self):
+        self.path = config.path2020.gakuryoku
+
 class Gakuryoku2015:
     need_original_col = ['H27個人番号', 'H27\n学年', 'kokugo_H27平均値', 'math_H27平均値', 'eng_H27平均値']
     mapper = {
@@ -116,8 +120,9 @@ def seed(save_dry = True):
     c.get_setting()
     g2018 = Gakuryoku2018(c)
     g2019 = Gakuryoku2019()
+    g2020 = Gakuryoku2020()
     data = pd.DataFrame()
-    for g in [g2015, g2016, g2017, g2018, g2019]: # これはこれで別メソッドとして切り分けるべきなのかもなー
+    for g in [g2015, g2016, g2017, g2018, g2019, g2020]: # これはこれで別メソッドとして切り分けるべきなのかもなー
         g.build()
         data = pd.concat([data, g.data], axis=0)
     gs = Gakuryoku(data)

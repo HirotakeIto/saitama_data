@@ -11,7 +11,7 @@ replacelist.xlsxは毎年形式が変わったちゃうから自分で作る
 import pandas as pd
 from saitama_data.datasetup.models.info.classid_schoolid.schid_schoolid.model import SchidSchoolid
 
-__path__ = 'data/original_data/マスタデータ/replacelist/replacelist.xlsx'
+__path__ = 'data/original_data/マスタデータ/replacelist/replacelist.xlsx'
 
 def convert_columns_type(data, convert_list: dict, errors='raise'):
     for c in convert_list.keys():

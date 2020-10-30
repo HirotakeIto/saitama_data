@@ -1,4 +1,12 @@
 from configparser import ConfigParser
+from addict import Dict
+
+
+parser = ConfigParser()
+parser.read("saitama_data/setting.ini")
+config: Dict = Dict({})
+for section in parser.sections():
+    config.update({section: Dict(parser.items(section))})
 
 
 class ReadConfig2015(object):

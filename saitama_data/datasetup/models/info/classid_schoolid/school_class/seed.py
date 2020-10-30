@@ -1,11 +1,12 @@
 import pandas as pd
+from saitama_data.lib.read_config import config
 from saitama_data.datasetup.models.info.classid_schoolid.school_class.model import SchoolClass
-from saitama_data.datasetup.test.test import get_info_save
 from saitama_data.lib.safe_path import safe_path
 
 __path__ = 'data/original_data/マスタデータ/学校マスタ/2018/過年度学校マスタ_2018.csv'
 __path2__ = 'data/original_data/マスタデータ/学校マスタ/過年度学校マスタ.csv'
 __path3__ = 'data/original_data/H31データ/H31データ/その他/学校マスタ/過年度学校マスタ_2019.csv'
+__path2020__ = config.path2020.over_school_master
 
 
 def convert_columns_type(data, convert_list: dict, errors='raise'):
@@ -25,16 +26,21 @@ def read_data_concat():
     school2 = (
         pd.read_csv(safe_path(__path2__))
         [['sch_id', '年度', 'grad_4', 'grad_5', 'grad_6', 'grad_7', 'grad_8', 'grad_9']]
+    )  
+    school3 = (
+        pd.read_csv(__path3__, encoding='sjis')
+        [['sch_id', '年度', 'grad_4', 'grad_5', 'grad_6', 'grad_7', 'grad_8', 'grad_9']]
     )
-    # school3 = (
-    #     pd.read_csv(__path3__, encoding='sjis')
-    #     [['sch_id', '年度', 'grad_4', 'grad_5', 'grad_6', 'grad_7', 'grad_8', 'grad_9']]
-    # )
+    school4 = (
+        pd.read_csv(safe_path(__path2020__), encoding='sjis')
+        .assign(**{"年度": lambda dfx: dfx['year']})
+        [['sch_id', '年度', 'grad_4', 'grad_5', 'grad_6', 'grad_7', 'grad_8', 'grad_9']]
+    )      
     # return (
     #     school.append(school2).append(school3)
     # )
     return (
-        school.append(school2)
+        school.append(school2).append(school3).append(school4)
     )
 
 
@@ -81,8 +87,6 @@ def seed(save_dry=True):
     sc_seed = SchoolClassSeed()
     sc = SchoolClass(sc_seed.data)
     sc.validate()
-    _, test = get_info_save(SchoolClass)
-    test(sc)
     if save_dry is False:
         sc.save()
 
