@@ -24,6 +24,9 @@
 .Rproj
 *.log
 !access.log
+.venv
+.pytest_cache
+.vscode
 .Rproj.user
 .DS_Store
 saitama_data/setting.ini
