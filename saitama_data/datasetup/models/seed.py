@@ -15,7 +15,8 @@ seed_master　→　seed_info_master
 
 """
 
-def seed_master(save_dry=True):
+
+def seed_master(save_dry=False):
     # save_dry = True
     seed_correspondence(save_dry)
     id_master_seed(save_dry)
@@ -26,9 +27,8 @@ def seed_master(save_dry=True):
     seito_qes_sosei_seed(save_dry)
 
 
-def seed_info_master(save_dry=True):
+def seed_info_master(save_dry=False):
     # save_dry = True
     seed_schid_schoolid(save_dry)
     seed_school_class(save_dry)
     seed_classid_schoolid(save_dry)
-

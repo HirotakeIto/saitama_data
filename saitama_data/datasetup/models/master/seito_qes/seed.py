@@ -4,19 +4,20 @@ from saitama_data.datasetup.models.master.seito_qes._2019.seed_2019 import main2
 from saitama_data.datasetup.models.master.seito_qes._2020.seed_2020 import main2020
 from saitama_data.datasetup.models.master.seito_qes.model import SeitoQes
 
+
 def seed(save_dry=True):
-    def save(data, dry_save = False, if_exists='replace'):
+    def save(data, dry_save=False, if_exists='replace'):
         model = SeitoQes(data).adjust_schema().convert()
         model.validate_convert()
         if dry_save is False:
             model.save(if_exists)
         print('NUMBER OF DUPLICATED ID: ', data.duplicated(subset=['grade', 'year', 'id'], keep=False).sum())
 
-    save(main20152016(), dry_save= save_dry, if_exists='replace')
-    save(main2017(), dry_save= save_dry, if_exists='append')
-    save(main2018(), dry_save= save_dry, if_exists='append')
-    save(main2019(), dry_save= save_dry, if_exists='append')
-    save(main2020(), dry_save= save_dry, if_exists='append')
+    save(main20152016(), dry_save=save_dry, if_exists='replace')
+    save(main2017(), dry_save=save_dry, if_exists='append')
+    save(main2018(), dry_save=save_dry, if_exists='append')
+    save(main2019(), dry_save=save_dry, if_exists='append')
+    save(main2020(), dry_save=save_dry, if_exists='append')
 
 
 # def seed():
@@ -35,4 +36,4 @@ def seed(save_dry=True):
 #     # ToDo: 昔格納したやつはそこを対処してたりしたけど、それはあとでやる
 #     print('q138は本当はmin１max１２だけど、これはそうなっていない\n',
 #           '昔格納したやつはそこを対処してたりしたけど、それはあとでやる')
-#     return data
+#     return

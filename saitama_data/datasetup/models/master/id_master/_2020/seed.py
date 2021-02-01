@@ -7,13 +7,13 @@ PATH_ID_MASTER = config.path2020.id_master
 PATH_SEITO_INFO = config.path2020.seito_info
 
 class MasterId2020(MasterId):
-    path_id_master = './data/original_data/H31データ/H31データ/IDマスタ/id_master_grade_skp31.csv'
+    path_id_master = PATH_ID_MASTER
 
     def __init__(self):
         self.path = self.path_id_master
 
 class SeitoInfo2020(SeitoInfo2018):
-    path_seito_info = './data/original_data/H31データ/H31データ/H31データ/児童生徒の解答（回答）用紙情報/student_info_2019.csv'
+    path_seito_info = PATH_SEITO_INFO
     year_value = 2020
 
     def __init__(self):

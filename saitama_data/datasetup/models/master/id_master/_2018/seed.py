@@ -207,5 +207,3 @@ def main2018(profileing=False):
         profile.to_file('./tmp/id_master.html')
     return id_master
     # id_master.loc[id_master['school_id'].isnull(), :]
-
-
