@@ -32,3 +32,8 @@ def seed_info_master(save_dry=False):
     seed_schid_schoolid(save_dry)
     seed_school_class(save_dry)
     seed_classid_schoolid(save_dry)
+
+
+if __name__ == "__main__":
+    seed_master()
+    seed_info_master()
