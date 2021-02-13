@@ -40,3 +40,6 @@ data/info/*
 !data/info/school_qes/*
 !./saitama_data/datasetup/test/log/*.csv
 !tests/snapshots/snap_test/*.csv
+!data/info/seito_qes_information_file
+!data/info/seito_qes_information_file/**/*.csv
+!data/info/seito_qes_information_file/**/*.xlsx
